@@ -1,36 +1,35 @@
 const sqlite3 = require("sqlite3");
 const { open } = require("sqlite");
 
-
-//Criando uma função assíncrona
+// Criando uma função assíncrona
 const criarBanco = async () => {
-
-
   const db = await open({
     filename: "./database.db",
     driver: sqlite3.Database,
   });
 
-
-  //Criando a tabela de incidentes
+  // ============================
+  // Criando a tabela de abrigos
+  // ============================
 
   await db.exec(`
-    CREATE TABLE IF NOT EXISTS incidentes(
+    CREATE TABLE IF NOT EXISTS abrigos(
         id INTEGER PRIMARY KEY AUTOINCREMENT,
-        tipo_animal TEXT,           -- Cachorro, gato, cavalo...
-        localizacao TEXT,           -- Onde foi achado (Rua, Bairro)
-        descricao TEXT,             -- Detalhes da animal
-        prioridade TEXT,            -- Baixa, Média, Alta
-        identificacao TEXT,         -- Coleira, microchip, 
-        data_registro TEXT,         -- Data em formato (ex: 16/03 16.03)
-        hora_registro TEXT,         -- Hora que foi registrado
-        status_resolucao TEXT DEFAULT 'Pendente'
+        nome_abrigo TEXT,                     -- Nome do abrigo ou responsável
+        localizacao TEXT,                     -- Endereço completo
+        contato TEXT,                         -- Telefone ou WhatsApp para contato
+        capacidade_total INTEGER,             -- Quantos animais o abrigo suporta no total
+        vagas_disponiveis INTEGER,            -- Quantas vagas ainda estão livres
+        tipos_aceitos TEXT,                   -- Quais animais aceita (Ex: Cães, Gatos, Ambos)
+        observacoes TEXT,                     -- Informações extras (Ex: aceita animais grandes)
+        data_cadastro TEXT,                   -- Data do cadastro
+        hora_cadastro TEXT,                   -- Hora do cadastro
+        status TEXT DEFAULT 'Ativo'           -- Banco define como 'Ativo' automaticamente
     )
-    `);
+  `);
 
-  console.log(
-    "Banco de dados configurado: A tabela de registros urbanos está pronta!",
-  );
-};
+  console.log("Banco de dados configurado: Tabela de abrigos está pronta!");
 
- module.exports = { criarBanco } //Cria uma ponte que permite compartilhar funções entre os arquivos
+}
+
+criarBanco()
